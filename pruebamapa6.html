@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo Protocolo de Kioto</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+        }
+        .info-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border: 1px solid black;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="info-box" class="info-box"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
+    <script>
+        const map = L.map('map').setView([20, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        const countries = {
+            "Brazil": {
+                "info": "Cumbre de la Tierra. Rio de Janeiro (1992)",
+                "color": "#ffcc00"
+            },
+            "Germany": {
+                "info": "COP1 Berlín (1995), Alemania; COP5 Bonn (1999), Alemania; COP23 Bonn (2017), Alemania",
+                "color": "#ff6600"
+            },
+            "Switzerland": {
+                "info": "COP2 Ginebra (1996), Suiza",
+                "color": "#ff3300"
+            },
+            "Japan": {
+                "info": "COP3 Kioto (1997), Japón",
+                "color": "#ff0000"
+            },
+            "Argentina": {
+                "info": "COP4 Buenos Aires (1998), Argentina; COP10 Buenos Aires (2004), Argentina",
+                "color": "#cc0000"
+            },
+            "Netherlands": {
+                "info": "COP6 La Haya (2000), Países Bajos",
+                "color": "#990000"
+            },
+            "Morocco": {
+                "info": "COP7 Marrakech (2001), Marruecos; COP22 Marrakech (2016), Marruecos",
+                "color": "#660000"
+            },
+            "India": {
+                "info": "COP8 Nueva Delhi (2002), India",
+                "color": "#330000"
+            },
+            "Italy": {
+                "info": "COP9 Milán (2003), Italia",
+                "color": "#003300"
+            },
+            "Canada": {
+                "info": "COP11/MOP1 Montreal (2005), Canadá",
+                "color": "#006600"
+            },
+            "Kenya": {
+                "info": "COP12 Nairobi (2006), Kenia",
+                "color": "#009900"
+            },
+            "Indonesia": {
+                "info": "COP13 Bali (2007), Indonesia",
+                "color": "#00cc00"
+            },
+            "Poland": {
+                "info": "COP14 Poznań (2008), Polonia; COP19 Varsovia (2013), Polonia; COP24 Katowice (2018), Polonia",
+                "color": "#00ff00"
+            },
+            "Denmark": {
+                "info": "COP15 Copenhague (2009), Dinamarca",
+                "color": "#33ff33"
+            },
+            "Mexico": {
+                "info": "COP16 Cancún (2010), México",
+                "color": "#66ff66"
+            },
+            "South Africa": {
+                "info": "COP17 Durban (2011), Sudáfrica",
+                "color": "#99ff99"
+            },
+            "Qatar": {
+                "info": "COP18 Doha (2012), Catar",
+                "color": "#ccffcc"
+            },
+            "Peru": {
+                "info": "COP20 Lima (2014), Perú",
+                "color": "#00ffff"
+            },
+            "France": {
+                "info": "COP21 París (2015), Francia",
+                "color": "#33ccff"
+            },
+            "Fiji": {
+                "info": "COP23 Bonn (2017), Alemania, presidida por Fiji",
+                "color": "#3399ff"
+            },
+            "Spain": {
+                "info": "COP25 Madrid (2019), España, presidida por Chile",
+                "color": "#3366ff"
+            },
+            "United Kingdom": {
+                "info": "COP26 Glasgow (2021), Escocia",
+                "color": "#3333ff"
+            },
+            "Egypt": {
+                "info": "COP27 Sharm El-Sheikh (2022), Egipto",
+                "color": "#6666ff"
+            },
+            "United Arab Emirates": {
+                "info": "COP28 Dubái (2023), Emiratos Árabes Unidos",
+                "color": "#9999ff"
+            },
+            "Azerbaijan": {
+                "info": "COP29 Baku (2024), Azerbaiyán",
+                "color": "#ccccff"
+            }
+        };
+
+        const style = feature => ({
+            fillColor: countries[feature.properties.ADMIN] ? countries[feature.properties.ADMIN].color : '#ffffff',
+            weight: 2,
+            opacity: 1,
+            color: 'black',
+            dashArray: '3',
+            fillOpacity: 0.7
+        });
+
+        const onEachFeature = (feature, layer) => {
+            layer.on({
+                click: () => {
+                    const countryName = feature.properties.ADMIN;
+                    const infoBox = document.getElementById('info-box');
+                    infoBox.innerHTML = countries[countryName] ? countries[countryName].info : "Información no disponible";
+                    infoBox.style.display = 'block';
+                }
+            });
+        };
+
+        L.geoJson.ajax('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json', {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
+        map.on('click', function() {
+            const infoBox = document.getElementById('info-box');
+            infoBox.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
