@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo de Argentina - Delta del Paraná</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mapa Interactivo de Argentina - Delta del Paraná</h1>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Crear el mapa centrado en Argentina
+        var map = L.map('map').setView([-34.6037, -58.3816], 6);
+
+        // Añadir una capa de mapas base (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Coordenadas del Delta del Paraná
+        var deltaParanaCoords = [
+            [-32.0, -60.0],
+            [-33.0, -60.0],
+            [-34.0, -59.5],
+            [-34.3, -59.3],
+            [-34.5, -58.8],
+            [-34.4, -58.6],
+            [-34.3, -58.4],
+            [-33.7, -58.5],
+            [-33.0, -59.0],
+            [-32.5, -59.5],
+            [-32.0, -60.0]
+        ];
+
+        // Crear un polígono para resaltar el Delta del Paraná
+        var deltaParana = L.polygon(deltaParanaCoords, {
+            color: 'blue',
+            fillColor: '#3f87a6',
+            fillOpacity: 0.5
+        }).addTo(map);
+
+        // Añadir un popup al polígono
+        deltaParana.bindPopup('<b>Delta del Paraná</b><br>Esta es una región importante de humedales en Argentina.');
+    </script>
+</body>
+</html>
