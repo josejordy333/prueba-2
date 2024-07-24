@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo de Cumbres Climáticas</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mapa Interactivo de Cumbres Climáticas</h1>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Crear el mapa
+        var map = L.map('map').setView([20, 0], 2);
+
+        // Añadir una capa de mapas base (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Datos de las cumbres
+        var cumbres = [
+            { nombre: 'Cumbre de la Tierra', lat: -22.9068, lon: -43.1729, año: 1992, lugar: 'Río de Janeiro, Brasil' },
+            { nombre: 'COP1', lat: 52.52, lon: 13.405, año: 1995, lugar: 'Berlín, Alemania' },
+            { nombre: 'COP2', lat: 46.2044, lon: 6.1432, año: 1996, lugar: 'Ginebra, Suiza' },
+            { nombre: 'COP3', lat: 35.6762, lon: 139.6503, año: 1997, lugar: 'Kioto, Japón' },
+            { nombre: 'COP4', lat: -34.6037, lon: -58.3816, año: 1998, lugar: 'Buenos Aires, Argentina' },
+            { nombre: 'COP5', lat: 50.1109, lon: 8.6821, año: 1999, lugar: 'Bonn, Alemania' },
+            { nombre: 'COP6 La Haya', lat: 52.0703, lon: 4.3007, año: 2000, lugar: 'La Haya, Países Bajos' },
+            { nombre: 'COP6 Bonn', lat: 50.7374, lon: 7.0982, año: 2001, lugar: 'Bonn, Alemania' },
+            { nombre: 'COP7', lat: 31.6295, lon: -7.9811, año: 2001, lugar: 'Marrakech, Marruecos' },
+            { nombre: 'COP8', lat: 28.6139, lon: 77.2090, año: 2002, lugar: 'Nueva Delhi, India' },
+            { nombre: 'COP9', lat: 45.4654, lon: 9.1859, año: 2003, lugar: 'Milán, Italia' },
+            { nombre: 'COP10', lat: -34.6037, lon: -58.3816, año: 2004, lugar: 'Buenos Aires, Argentina' },
+            { nombre: 'COP11/MOP1', lat: 45.4215, lon: -75.6972, año: 2005, lugar: 'Montreal, Canadá' },
+            { nombre: 'COP12', lat: -1.2864, lon: 36.8172, año: 2006, lugar: 'Nairobi, Kenia' },
+            { nombre: 'COP13', lat: -8.3405, lon: 115.0919, año: 2007, lugar: 'Bali, Indonesia' },
+            { nombre: 'COP14', lat: 52.2297, lon: 21.0122, año: 2008, lugar: 'Poznań, Polonia' },
+            { nombre: 'COP15', lat: 55.6761, lon: 12.5683, año: 2009, lugar: 'Copenhague, Dinamarca' },
+            { nombre: 'COP16', lat: 19.4326, lon: -99.1332, año: 2010, lugar: 'Ciudad de México, México' },
+            { nombre: 'COP17', lat: -29.8587, lon: 31.0216, año: 2011, lugar: 'Durban, Sudáfrica' },
+            { nombre: 'COP18', lat: 25.276987, lon: 55.296249, año: 2012, lugar: 'Doha, Catar' },
+            { nombre: 'COP19', lat: 52.2297, lon: 21.0122, año: 2013, lugar: 'Varsovia, Polonia' },
+            { nombre: 'COP20', lat: -12.0464, lon: -77.0428, año: 2014, lugar: 'Lima, Perú' },
+            { nombre: 'COP21', lat: 48.8566, lon: 2.3522, año: 2015, lugar: 'París, Francia' },
+            { nombre: 'COP22', lat: 31.6295, lon: -7.9811, año: 2016, lugar: 'Marrakech, Marruecos' },
+            { nombre: 'COP23', lat: 50.7374, lon: 7.0982, año: 2017, lugar: 'Bonn, Alemania' },
+            { nombre: 'COP24', lat: 50.2649, lon: 19.0238, año: 2018, lugar: 'Katowice, Polonia' },
+            { nombre: 'COP25', lat: 40.4168, lon: -3.7038, año: 2019, lugar: 'Madrid, España' },
+            { nombre: 'COP26', lat: 55.8781, lon: -4.3105, año: 2021, lugar: 'Glasgow, Escocia' },
+            { nombre: 'COP27', lat: 27.7786, lon: 33.9683, año: 2022, lugar: 'Sharm El-Sheikh, Egipto' },
+            { nombre: 'COP28', lat: 25.276987, lon: 55.296249, año: 2023, lugar: 'Dubái, Emiratos Árabes Unidos' },
+            { nombre: 'COP29', lat: 40.4093, lon: 49.8671, año: 2024, lugar: 'Bakú, Azerbaiyán' },
+            { nombre: 'COP30', lat: -1.4540, lon: -48.4902, año: 2025, lugar: 'Belém, Brasil' }
+        ];
+
+        // Añadir marcadores al mapa
+        cumbres.forEach(function(cumbre) {
+            L.marker([cumbre.lat, cumbre.lon]).addTo(map)
+                .bindPopup('<b>' + cumbre.nombre + ' (' + cumbre.año + ')</b><br>' + cumbre.lugar);
+        });
+
+        // Manejar clic derecho para mostrar información
+        map.on('contextmenu', function(e) {
+            var latlng = e.latlng;
+            var popup = L.popup()
+                .setLatLng(latlng)
+                .setContent('Haz clic en un marcador para ver información.')
+                .openOn(map);
+        });
+    </script>
+</body>
+</html>
