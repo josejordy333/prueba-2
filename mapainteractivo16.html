@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumbres del Protocolo de Kioto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        #map {
+            position: relative;
+            display: inline-block;
+        }
+        #world-map {
+            width: 80%;
+            max-width: 800px;
+            cursor: pointer;
+        }
+        #info {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cumbres del Protocolo de Kioto</h1>
+    <div id="map">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/World_map_blank_without_borders.svg" alt="Mapa del Mundo" id="world-map">
+    </div>
+    <div id="info">
+        <p id="cumbre-info">Haz clic en un país para ver información sobre la cumbre.</p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cumbresInfo = {
+                'Brasil': 'Cumbre de la Tierra (1992) en Río de Janeiro.',
+                'Alemania': 'COP1 en Berlín (1995) y COP5 en Bonn (1999).',
+                'Suiza': 'COP2 en Ginebra (1996).',
+                'Japón': 'COP3 en Kioto (1997).',
+                'Argentina': 'COP4 en Buenos Aires (1998) y COP10 en Buenos Aires (2004).',
+                'Países Bajos': 'COP6 en La Haya (2000).',
+                'Marruecos': 'COP7 en Marrakech (2001) y COP22 en Marrakech (2016).',
+                'India': 'COP8 en Nueva Delhi (2002).',
+                'Italia': 'COP9 en Milán (2003).',
+                'Canadá': 'COP11/MOP1 en Montreal (2005).',
+                'Kenia': 'COP12 en Nairobi (2006).',
+                'Indonesia': 'COP13 en Bali (2007).',
+                'Polonia': 'COP14 en Poznań (2008) y COP19 en Varsovia (2013).',
+                'Dinamarca': 'COP15 en Copenhague (2009).',
+                'México': 'COP16 en Cancún (2010).',
+                'Sudáfrica': 'COP17 en Durban (2011).',
+                'Catar': 'COP18 en Doha (2012).',
+                'Perú': 'COP20 en Lima (2014).',
+                'Francia': 'COP21 en París (2015).',
+                'Alemania': 'COP23 en Bonn (2017).',
+                'Escocia': 'COP26 en Glasgow (2021).',
+                'Egipto': 'COP27 en Sharm El-Sheikh (2022).',
+                'Emiratos Árabes Unidos': 'COP28 en Dubái (2023).',
+                'Azerbaiyán': 'COP29 en Bakú (2024).'
+            };
+
+            const worldMap = document.getElementById('world-map');
+
+            worldMap.addEventListener('click', (event) => {
+                const rect = worldMap.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                const country = identifyCountry(x, y);
+                if (cumbresInfo[country]) {
+                    document.getElementById('cumbre-info').textContent = cumbresInfo[country];
+                } else {
+                    document.getElementById('cumbre-info').textContent = 'Haz clic en un país para ver información.';
+                }
+            });
+
+            function identifyCountry(x, y) {
+                // Aquí debes definir las coordenadas para cada país
+                // Ejemplo simplificado para algunos países
+                if (x >= 300 && x <= 400 && y >= 250 && y <= 350) {
+                    return 'Brasil'; // Coordenadas ficticias para Brasil
+                }
+                if (x >= 450 && x <= 550 && y >= 150 && y <= 250) {
+                    return 'Alemania'; // Coordenadas ficticias para Alemania
+                }
+                if (x >= 600 && x <= 700 && y >= 100 && y <= 200) {
+                    return 'Suiza'; // Coordenadas ficticias para Suiza
+                }
+                // Agrega más condiciones para otros países
+                return '';
+            }
+        });
+    </script>
+</body>
+</html>
