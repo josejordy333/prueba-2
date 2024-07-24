@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo Protocolo de Kioto</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+        }
+        .info-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border: 1px solid black;
+            z-index: 1000;
+            display: none;
+            max-width: 80%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .info-box h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="info-box" class="info-box">
+        <button onclick="closeInfoBox()">Cerrar</button>
+        <div id="info-content"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
+    <script>
+        const map = L.map('map').setView([20, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        const countriesWithSummits = {
+            "Brazil": "Cumbre de la Tierra. Rio de Janeiro (1992)",
+            "Germany": "COP1 Berlín (1995), Alemania; COP5 Bonn (1999), Alemania; COP23 Bonn (2017), Alemania",
+            "Switzerland": "COP2 Ginebra (1996), Suiza",
+            "Japan": "COP3 Kioto (1997), Japón",
+            "Argentina": "COP4 Buenos Aires (1998), Argentina; COP10 Buenos Aires (2004), Argentina",
+            "Netherlands": "COP6 La Haya (2000), Países Bajos",
+            "Morocco": "COP7 Marrakech (2001), Marruecos; COP22 Marrakech (2016), Marruecos",
+            "India": "COP8 Nueva Delhi (2002), India",
+            "Italy": "COP9 Milán (2003), Italia",
+            "Canada": "COP11/MOP1 Montreal (2005), Canadá",
+            "Kenya": "COP12 Nairobi (2006), Kenia",
+            "Indonesia": "COP13 Bali (2007), Indonesia",
+            "Poland": "COP14 Poznań (2008), Polonia; COP19 Varsovia (2013), Polonia; COP24 Katowice (2018), Polonia",
+            "Denmark": "COP15 Copenhague (2009), Dinamarca",
+            "Mexico": "COP16 Cancún (2010), México",
+            "South Africa": "COP17 Durban (2011), Sudáfrica",
+            "Qatar": "COP18 Doha (2012), Catar",
+            "Peru": "COP20 Lima (2014), Perú",
+            "France": "COP21 París (2015), Francia",
+            "Fiji": "COP23 Bonn (2017), Alemania, presidida por Fiji",
+            "Spain": "COP25 Madrid (2019), España, presidida por Chile",
+            "United Kingdom": "COP26 Glasgow (2021), Escocia",
+            "Egypt": "COP27 Sharm El-Sheikh (2022), Egipto",
+            "United Arab Emirates": "COP28 Dubái (2023), Emiratos Árabes Unidos",
+            "Azerbaijan": "COP29 Baku (2024), Azerbaiyán"
+        };
+
+        function style(feature) {
+            return {
+                weight: 2,
+                opacity: 1,
+                color: 'black',
+                dashArray: '3',
+                fillOpacity: 0
+            };
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                contextmenu: (e) => {
+                    const countryName = feature.properties.ADMIN;
+                    if (countriesWithSummits[countryName]) {
+                        const infoBox = document.getElementById('info-box');
+                        const infoContent = document.getElementById('info-content');
+                        infoContent.innerHTML = `<h3>${countryName}</h3><p>${countriesWithSummits[countryName]}</p>`;
+                        infoBox.style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        L.geoJson.ajax('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json', {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
+        function closeInfoBox() {
+            document.getElementById('info-box').style.display = 'none';
+        }
+
+        map.on('click', function() {
+            const infoBox = document.getElementById('info-box');
+            infoBox.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
