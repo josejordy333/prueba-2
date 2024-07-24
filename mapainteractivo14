@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo de Cumbres del Protocolo de Kioto</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Crear el mapa
+        var map = L.map('map').setView([20, 0], 2);
+
+        // Añadir capa de mapa base
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Datos de los países anfitriones con información de cumbre
+        var cumbres = {
+            "BR": "Cumbre de la Tierra 1992 en Río de Janeiro.",
+            "DE": "COP1 1995 en Berlín y COP5 1999 en Bonn.",
+            "CH": "COP2 1996 en Ginebra.",
+            "JP": "COP3 1997 en Kioto.",
+            "AR": "COP4 1998 en Buenos Aires y COP10 2004 en Buenos Aires.",
+            "NL": "COP6 2000 en La Haya.",
+            "MA": "COP7 2001 en Marrakech y COP22 2016 en Marrakech.",
+            "IN": "COP8 2002 en Nueva Delhi.",
+            "IT": "COP9 2003 en Milán.",
+            "CA": "COP11/MOP1 2005 en Montreal.",
+            "KE": "COP12 2006 en Nairobi.",
+            "ID": "COP13 2007 en Bali.",
+            "PL": "COP14 2008 en Poznań, COP19 2013 en Varsovia y COP24 2018 en Katowice.",
+            "DK": "COP15 2009 en Copenhague.",
+            "MX": "COP16 2010 en Cancún.",
+            "ZA": "COP17 2011 en Durban.",
+            "QA": "COP18 2012 en Doha.",
+            "PE": "COP20 2014 en Lima.",
+            "FR": "COP21 2015 en París.",
+            "ES": "COP25 2019 en Madrid.",
+            "GB": "COP26 2021 en Glasgow.",
+            "EG": "COP27 2022 en Sharm El-Sheikh.",
+            "AE": "COP28 2023 en Dubái.",
+            "AZ": "COP29 2024 en Baku.",
+            "BR": "COP30 2025 en Belém."
+        };
+
+        // Función para manejar clic en el país
+        function onCountryClick(e) {
+            var iso = e.target.feature.properties.iso_a3;
+            if (cumbres[iso]) {
+                e.target.bindPopup(cumbres[iso]).openPopup();
+            }
+        }
+
+        // Cargar GeoJSON de países
+        fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    filter: function (feature) {
+                        return cumbres.hasOwnProperty(feature.properties.iso_a3);
+                    },
+                    onEachFeature: function (feature, layer) {
+                        var iso = feature.properties.iso_a3;
+                        if (cumbres[iso]) {
+                            layer.on('click', onCountryClick);
+                            layer.setStyle({ color: '#ff7800', weight: 2, fillOpacity: 0.7 });
+                        }
+                    }
+                }).addTo(map);
+            });
+    </script>
+</body>
+</html>
