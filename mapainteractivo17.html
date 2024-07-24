@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumbres del Protocolo de Kioto</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        #info {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cumbres del Protocolo de Kioto</h1>
+    <div id="map"></div>
+    <div id="info">
+        <p id="cumbre-info">Haz clic en un país para ver información sobre la cumbre.</p>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const map = L.map('map').setView([20, 0], 2);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            const countries = {
+                'Brasil': 'Cumbre de la Tierra (1992) en Río de Janeiro.',
+                'Alemania': 'COP1 en Berlín (1995) y COP5 en Bonn (1999).',
+                'Suiza': 'COP2 en Ginebra (1996).',
+                'Japón': 'COP3 en Kioto (1997).',
+                'Argentina': 'COP4 en Buenos Aires (1998) y COP10 en Buenos Aires (2004).',
+                'Países Bajos': 'COP6 en La Haya (2000).',
+                'Marruecos': 'COP7 en Marrakech (2001) y COP22 en Marrakech (2016).',
+                'India': 'COP8 en Nueva Delhi (2002).',
+                'Italia': 'COP9 en Milán (2003).',
+                'Canadá': 'COP11/MOP1 en Montreal (2005).',
+                'Kenia': 'COP12 en Nairobi (2006).',
+                'Indonesia': 'COP13 en Bali (2007).',
+                'Polonia': 'COP14 en Poznań (2008) y COP19 en Varsovia (2013).',
+                'Dinamarca': 'COP15 en Copenhague (2009).',
+                'México': 'COP16 en Cancún (2010).',
+                'Sudáfrica': 'COP17 en Durban (2011).',
+                'Catar': 'COP18 en Doha (2012).',
+                'Perú': 'COP20 en Lima (2014).',
+                'Francia': 'COP21 en París (2015).',
+                'Escocia': 'COP26 en Glasgow (2021).',
+                'Egipto': 'COP27 en Sharm El-Sheikh (2022).',
+                'Emiratos Árabes Unidos': 'COP28 en Dubái (2023).',
+                'Azerbaiyán': 'COP29 en Bakú (2024).'
+            };
+
+            const geojsonCountries = {
+                "type": "FeatureCollection",
+                "features": [
+                    // Aquí deberás agregar la geometría de cada país en formato GeoJSON
+                    // Ejemplo para Brasil (debes reemplazar con datos reales):
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "name": "Brasil",
+                            "info": countries['Brasil']
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[[-73.98, -5.27], [-60.00, -5.27], [-60.00, 5.27], [-73.98, 5.27], [-73.98, -5.27]]]
+                        }
+                    }
+                    // Agrega más países aquí
+                ]
+            };
+
+            L.geoJSON(geojsonCountries, {
+                onEachFeature: (feature, layer) => {
+                    layer.on('click', () => {
+                        document.getElementById('cumbre-info').textContent = feature.properties.info;
+                    });
+                },
+                style: {
+                    color: '#ff7800',
+                    weight: 2,
+                    opacity: 0.65
+                }
+            }).addTo(map);
+        });
+    </script>
+</body>
+</html>
