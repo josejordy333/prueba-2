@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo de Cumbres del Protocolo de Kioto</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        .info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            margin-left: -150px;
+            padding: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="info" id="info"></div>
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inicializar el mapa
+        const map = L.map('map').setView([20, 0], 2);
+
+        // Añadir capa base del mapa
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Datos de los países del Protocolo de Kioto
+        const countries = [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Alemania",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [10, 50],
+                        [12, 50],
+                        [12, 52],
+                        [10, 52],
+                        [10, 50]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Suiza",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [8, 46],
+                        [10, 46],
+                        [10, 48],
+                        [8, 48],
+                        [8, 46]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Japón",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [138, 36],
+                        [140, 36],
+                        [140, 38],
+                        [138, 38],
+                        [138, 36]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Argentina",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-60, -40],
+                        [-58, -40],
+                        [-58, -38],
+                        [-60, -38],
+                        [-60, -40]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Marruecos",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-6, 32],
+                        [-4, 32],
+                        [-4, 34],
+                        [-6, 34],
+                        [-6, 32]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "India",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [78, 20],
+                        [80, 20],
+                        [80, 22],
+                        [78, 22],
+                        [78, 20]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Italia",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [12, 41],
+                        [14, 41],
+                        [14, 43],
+                        [12, 43],
+                        [12, 41]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Canadá",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-130, 50],
+                        [-120, 50],
+                        [-120, 60],
+                        [-130, 60],
+                        [-130, 50]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Kenia",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [36, -1],
+                        [38, -1],
+                        [38, 1],
+                        [36, 1],
+                        [36, -1]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Indonesia",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [113, -8],
+                        [115, -8],
+                        [115, -6],
+                        [113, -6],
+                        [113, -8]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Polonia",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [19, 51],
+                        [21, 51],
+                        [21, 53],
+                        [19, 53],
+                        [19, 51]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Francia",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [2, 46],
+                        [4, 46],
+                        [4, 48],
+                        [2, 48],
+                        [2, 46]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Escocia",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-5, 56],
+                        [-3, 56],
+                        [-3, 58],
+                        [-5, 58],
+                        [-5, 56]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Egipto",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [31, 22],
+                        [33, 22],
+                        [33, 24],
+                        [31, 24],
+                        [31, 22]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Emiratos Árabes Unidos",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [53, 24],
+                        [55, 24],
+                        [55, 26],
+                        [53, 26],
+                        [53, 24]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Azerbaiyán",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [45, 40],
+                        [47, 40],
+                        [47, 42],
+                        [45, 42],
+                        [45, 40]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "Brasil",
+                    "info": "Cumbres Sucesivas\nDespués de que se firmara el Protocolo de Kioto, hubo varias reuniones importantes para seguir trabajando contra el cambio climático. ...\n\nMás detalles..."
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-60, -10],
+                        [-58, -10],
+                        [-58, -8],
+                        [-60, -8],
+                        [-60, -10]
+                    ]]
+                }
+            }
+        ];
+
+        // Añadir capa de GeoJSON
+        L.geoJSON(countries, {
+            onEachFeature: function (feature, layer) {
+                layer.on('contextmenu', function (e) {
+                    const infoDiv = document.getElementById('info');
+                    infoDiv.innerHTML = feature.properties.info;
+                });
+            }
+        }).addTo(map);
+    </script>
+</body>
+</html>
