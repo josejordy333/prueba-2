@@ -3,194 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco-Guardianes: La Aventura del Delta del Paraná</title>
+    <title>Juego de Parejas del Delta del Paraná</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        #info {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
-            z-index: 100;
-        }
+        body { font-family: Arial, sans-serif; }
+        .card { width: 100px; height: 150px; border: 1px solid #ccc; margin: 10px; display: inline-block; text-align: center; vertical-align: top; cursor: pointer; }
+        .hidden { background-color: #f0f0f0; }
     </style>
 </head>
 <body>
-    <div id="info">
-        <h1>Eco-Guardianes: La Aventura del Delta del Paraná</h1>
-        <p>Usa las teclas W, A, S, D para moverte y el ratón para mirar alrededor.</p>
+    <h1>Juego de Parejas del Delta del Paraná</h1>
+    <div id="game-board">
+        <div class="card hidden" data-pair="1">🌳</div>
+        <div class="card hidden" data-pair="1">Árbol Sauce</div>
+        <div class="card hidden" data-pair="2">🐦</div>
+        <div class="card hidden" data-pair="2">Ave local</div>
+        <!-- Agregar más parejas -->
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
-    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
     <script>
-        // Setup básico de Three.js
-        let scene, camera, renderer, controls;
-        let objects = [];
-        let raycaster;
-
-        init();
-        animate();
-
-        function init() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
-
-            // Luces
-            const ambientLight = new THREE.AmbientLight(0x404040);
-            scene.add(ambientLight);
-
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-            directionalLight.position.set(1, 1, 1).normalize();
-            scene.add(directionalLight);
-
-            // Terreno básico
-            const geometry = new THREE.PlaneGeometry(1000, 1000, 100, 100);
-            const material = new THREE.MeshLambertMaterial({ color: 0x228B22 });
-            const plane = new THREE.Mesh(geometry, material);
-            plane.rotation.x = -Math.PI / 2;
-            scene.add(plane);
-
-            // Controles de movimiento
-            controls = new THREE.PointerLockControls(camera, document.body);
-
-            document.addEventListener('click', () => {
-                controls.lock();
-            });
-
-            scene.add(controls.getObject());
-
-            // Movimiento
-            const onKeyDown = function (event) {
-                switch (event.code) {
-                    case 'ArrowUp':
-                    case 'KeyW':
-                        moveForward = true;
-                        break;
-
-                    case 'ArrowLeft':
-                    case 'KeyA':
-                        moveLeft = true;
-                        break;
-
-                    case 'ArrowDown':
-                    case 'KeyS':
-                        moveBackward = true;
-                        break;
-
-                    case 'ArrowRight':
-                    case 'KeyD':
-                        moveRight = true;
-                        break;
+        let firstCard = null;
+        let secondCard = null;
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                if (!card.classList.contains('hidden') || secondCard) return;
+                card.classList.remove('hidden');
+                if (!firstCard) {
+                    firstCard = card;
+                } else {
+                    secondCard = card;
+                    setTimeout(() => {
+                        if (firstCard.dataset.pair === secondCard.dataset.pir) {
+                            firstCard.style.visibility = 'hidden';
+                            secondCard.style.visibility = 'hidden';
+                        } else {
+                            firstCard.classList.add('hidden');
+                            secondCard.classList.add('hidden');
+                        }
+                        firstCard = null;
+                        secondCard = null;
+                    }, 1000);
                 }
-            };
-
-            const onKeyUp = function (event) {
-                switch (event.code) {
-                    case 'ArrowUp':
-                    case 'KeyW':
-                        moveForward = false;
-                        break;
-
-                    case 'ArrowLeft':
-                    case 'KeyA':
-                        moveLeft = false;
-                        break;
-
-                    case 'ArrowDown':
-                    case 'KeyS':
-                        moveBackward = false;
-                        break;
-
-                    case 'ArrowRight':
-                    case 'KeyD':
-                        moveRight = false;
-                        break;
-                }
-            };
-
-            document.addEventListener('keydown', onKeyDown);
-            document.addEventListener('keyup', onKeyUp);
-
-            // Raycaster para colisiones
-            raycaster = new THREE.Raycaster();
-
-            // Esfera de ejemplo para representar un objeto
-            const sphereGeometry = new THREE.SphereGeometry(5, 32, 32);
-            const sphereMaterial = new THREE.MeshLambertMaterial({ color: 0x0077ff });
-            const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-            sphere.position.set(0, 5, -50);
-            scene.add(sphere);
-            objects.push(sphere);
-
-            // Instrucciones para los controles
-            const blocker = document.getElementById('blocker');
-            const instructions = document.getElementById('instructions');
-
-            controls.addEventListener('lock', function () {
-                instructions.style.display = 'none';
-                blocker.style.display = 'none';
             });
-
-            controls.addEventListener('unlock', function () {
-                blocker.style.display = 'block';
-                instructions.style.display = '';
-            });
-        }
-
-        // Variables de movimiento
-        let moveForward = false;
-        let moveBackward = false;
-        let moveLeft = false;
-        let moveRight = false;
-
-        const velocity = new THREE.Vector3();
-        const direction = new THREE.Vector3();
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            if (controls.isLocked === true) {
-                raycaster.ray.origin.copy(controls.getObject().position);
-                raycaster.ray.origin.y -= 10;
-
-                const intersections = raycaster.intersectObjects(objects);
-
-                const onObject = intersections.length > 0;
-
-                const delta = 0.1; // Ajusta esto para cambiar la velocidad
-
-                velocity.x -= velocity.x * 10.0 * delta;
-                velocity.z -= velocity.z * 10.0 * delta;
-
-                direction.z = Number(moveForward) - Number(moveBackward);
-                direction.x = Number(moveLeft) - Number(moveRight);
-                direction.normalize();
-
-                if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta;
-                if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta;
-
-                if (onObject === true) {
-                    velocity.y = Math.max(0, velocity.y);
-                }
-
-                controls.moveRight(-velocity.x * delta);
-                controls.moveForward(-velocity.z * delta);
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
 </body>
