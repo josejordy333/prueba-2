@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Guardianes: La Aventura del Delta del Paraná</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Eco-Guardianes: La Aventura del Delta del Paraná</h1>
+        <div id="scene"></div>
+        <div id="dialogue-box">
+            <p id="dialogue"></p>
+            <button id="next-button">Siguiente</button>
+        </div>
+        <div id="actions">
+            <button id="action1">Acción 1</button>
+            <button id="action2">Acción 2</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#game-container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border: 2px solid #00796b;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#scene {
+    height: 300px;
+    background-color: #b2ebf2;
+    border: 2px solid #004d40;
+    margin-bottom: 20px;
+}
+
+#dialogue-box {
+    margin-bottom: 20px;
+}
+
+#actions button {
+    background-color: #00796b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#actions button:hover {
+    background-color: #004d40;
+}
+let dialogueIndex = 0;
+
+const dialogues = [
+    "Luca: ¡Hola! Soy Luca, y juntos vamos a salvar el Delta del Paraná.",
+    "Luca: Nuestra misión comienza con una inundación devastadora que afecta a muchas comunidades.",
+    "María: Necesitamos reparar las infraestructuras y ayudar a las personas afectadas.",
+    "Juan: Yo conozco la zona, podemos comenzar por los puntos más críticos."
+];
+
+document.getElementById('next-button').addEventListener('click', () => {
+    if (dialogueIndex < dialogues.length - 1) {
+        dialogueIndex++;
+        document.getElementById('dialogue').textContent = dialogues[dialogueIndex];
+    } else {
+        document.getElementById('dialogue-box').style.display = 'none';
+        document.getElementById('actions').style.display = 'block';
+    }
+});
+
+document.getElementById('action1').addEventListener('click', () => {
+    alert('Acción 1 seleccionada: Reparar infraestructuras.');
+});
+
+document.getElementById('action2').addEventListener('click', () => {
+    alert('Acción 2 seleccionada: Ayudar a las personas afectadas.');
+});
+
+window.onload = () => {
+    document.getElementById('dialogue').textContent = dialogues[dialogueIndex];
+};
