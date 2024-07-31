@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura en el Delta del Paraná</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f8ff; padding: 20px; }
+        h1 { color: #2e8b57; }
+        .choice { margin: 10px 0; }
+        .choice button { padding: 10px 20px; background-color: #2e8b57; color: white; border: none; cursor: pointer; }
+        .choice button:hover { background-color: #3cb371; }
+        .result { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Aventura en el Delta del Paraná</h1>
+    <div id="story">
+        <p>Estás en el Delta del Paraná. Tu misión es ayudar a conservar este valioso ecosistema. ¿Qué harás primero?</p>
+        <div class="choice"><button onclick="makeChoice(1)">Reforestar con árboles nativos</button></div>
+        <div class="choice"><button onclick="makeChoice(2)">Organizar una limpieza de residuos</button></div>
+    </div>
+
+    <script>
+        function makeChoice(choice) {
+            let story = document.getElementById('story');
+            if (choice === 1) {
+                story.innerHTML = `<p>Decidiste reforestar con árboles nativos. Esto ayudará a estabilizar el suelo y mejorar el hábitat de la fauna local. ¿Qué harás ahora?</p>
+                <div class="choice"><button onclick="makeChoice(3)">Plantar más árboles</button></div>
+                <div class="choice"><button onclick="makeChoice(4)">Organizar un taller de educación ambiental</button></div>`;
+            } else if (choice === 2) {
+                story.innerHTML = `<p>Organizaste una limpieza de residuos. Esto ayudará a reducir la contaminación y proteger la fauna. ¿Qué harás ahora?</p>
+                <div class="choice"><button onclick="makeChoice(5)">Organizar más limpiezas</button></div>
+                <div class="choice"><button onclick="makeChoice(4)">Organizar un taller de educación ambiental</button></div>`;
+            } else if (choice === 3) {
+                story.innerHTML = `<p>Plantas más árboles, creando un bosque saludable. La biodiversidad empieza a mejorar y la fauna encuentra nuevos hábitats. ¡Bien hecho! ¿Qué harás ahora?</p>
+                <div class="choice"><button onclick="makeChoice(4)">Organizar un taller de educación ambiental</button></div>
+                <div class="choice"><button onclick="makeChoice(6)">Construir senderos educativos</button></div>`;
+            } else if (choice === 4) {
+                story.innerHTML = `<p>Organizas un taller de educación ambiental, aumentando la conciencia sobre la importancia del Delta del Paraná. La comunidad se involucra más en las actividades de conservación. ¿Qué harás ahora?</p>
+                <div class="choice"><button onclick="makeChoice(5)">Organizar más limpiezas</button></div>
+                <div class="choice"><button onclick="makeChoice(6)">Construir senderos educativos</button></div>`;
+            } else if (choice === 5) {
+                story.innerHTML = `<p>Organizas más limpiezas, lo que ayuda a mantener el Delta libre de residuos y mejora la calidad del agua. La fauna local comienza a recuperarse. ¡Gran trabajo!</p>
+                <div class="result">Has completado la aventura con éxito, ayudando a conservar el Delta del Paraná.</div>`;
+            } else if (choice === 6) {
+                story.innerHTML = `<p>Construyes senderos educativos que permiten a las personas aprender sobre la flora y fauna del Delta mientras disfrutan del paisaje. Esto fomenta el ecoturismo y la conservación. ¡Excelente trabajo!</p>
+                <div class="result">Has completado la aventura con éxito, ayudando a conservar el Delta del Paraná.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
