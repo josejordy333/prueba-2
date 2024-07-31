@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Guardianes: La Aventura del Delta del Paraná</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #game-container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 2px solid #00796b;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            display: none;
+        }
+
+        #scene {
+            height: 300px;
+            background-color: #b2ebf2;
+            border: 2px solid #004d40;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        #dialogue-box {
+            margin-bottom: 20px;
+        }
+
+        #actions {
+            display: none;
+        }
+
+        #actions button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #actions button:hover {
+            background-color: #004d40;
+        }
+
+        #three-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Eco-Guardianes: La Aventura del Delta del Paraná</h1>
+        <div id="dialogue-box">
+            <p id="dialogue"></p>
+            <button id="next-button">Siguiente</button>
+        </div>
+        <div id="actions">
+            <button id="action1">Reparar infraestructuras</button>
+            <button id="action2">Ayudar a las personas afectadas</button>
+            <button id="action3">Restaurar humedales</button>
+        </div>
+    </div>
+    <div id="three-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Juego de diálogo
+        let dialogueIndex = 0;
+
+        const dialogues = [
+            "Luca: ¡Hola! Soy Luca, y juntos vamos a salvar el Delta del Paraná.",
+            "Luca: Nuestra misión comienza con una inundación devastadora que afecta a muchas comunidades.",
+            "María: Necesitamos reparar las infraestructuras y ayudar a las personas afectadas.",
+            "Juan: Yo conozco la zona, podemos comenzar por los puntos más críticos.",
+            "Luca: Muy bien, ¿qué acción deberíamos tomar primero?",
+        ];
+
+        const actions = {
+            action1: "Has comenzado a reparar las infraestructuras. ¡Buen trabajo!",
+            action2: "Has comenzado a ayudar a las personas afectadas. ¡Bien hecho!",
+            action3: "Has comenzado a restaurar los humedales degradados. ¡Gran elección!"
+        };
+
+        document.getElementById('next-button').addEventListener('click', () => {
+            if (dialogueIndex < dialogues.length - 1) {
+                dialogueIndex++;
+                document.getElementById('dialogue').textContent = dialogues[dialogueIndex];
+                if (dialogueIndex === dialogues.length - 1) {
+                    document.getElementById('dialogue-box').style.display = 'none';
+                    document.getElementById('actions').style.display = 'block';
+                }
+            }
+        });
+
+        for (let action in actions) {
+            document.getElementById(action).addEventListener('click', () => {
+                alert(actions[action]);
+                document.getElementById('actions').style.display = 'none';
+                document.getElementById('dialogue-box').style.display = 'block';
+                document.getElementById('dialogue').textContent = actions[action];
+            });
+        }
+
+        window.onload = () => {
+            document.getElementById('dialogue').textContent = dialogues[dialogueIndex];
+        };
+
+        // Three.js - Escena 3D en 360 grados
+        let scene, camera, renderer, controls;
+
+        function init() {
+            const container = document.getElementById('three-container');
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 1);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableZoom = false;
+            controls.enablePan = false;
+
+            const geometry = new THREE.SphereGeometry(500, 60, 40);
+            geometry.scale(-1, 1, 1);
+
+            const texture = new THREE.TextureLoader().load('https://www.example.com/360image.jpg');
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        init();
+    </script>
+</body>
+</html>
