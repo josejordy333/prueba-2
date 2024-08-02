@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Delta del Paraná</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        function generateTerrain(size, height) {
+            const terrain = [];
+            for (let x = 0; x < size; x++) {
+                terrain[x] = [];
+                for (let y = 0; y < height; y++) {
+                    terrain[x][y] = [];
+                    for (let z = 0; z < size; z++) {
+                        if (y < height / 2) {
+                            terrain[x][y][z] = 1; // Tierra
+                        } else {
+                            terrain[x][y][z] = 0; // Aire
+                        }
+                    }
+                }
+            }
+            return terrain;
+        }
+
+        let scene, camera, renderer;
+        const terrainSize = 50;
+        const terrainHeight = 20;
+        const terrainData = generateTerrain(terrainSize, terrainHeight);
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Luz
+            const ambientLight = new THREE.AmbientLight(0xffffff);
+            scene.add(ambientLight);
+
+            // Crear terreno
+            const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
+            const blockMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+
+            for (let x = 0; x < terrainSize; x++) {
+                for (let y = 0; y < terrainHeight; y++) {
+                    for (let z = 0; z < terrainSize; z++) {
+                        if (terrainData[x][y][z] === 1) {
+                            const block = new THREE.Mesh(blockGeometry, blockMaterial);
+                            block.position.set(x - terrainSize / 2, y, z - terrainSize / 2);
+                            scene.add(block);
+                        }
+                    }
+                }
+            }
+
+            // Cámara
+            camera.position.set(0, 10, 30);
+            camera.lookAt(0, 0, 0);
+
+            // Controles
+            const controls = new THREE.PointerLockControls(camera, document.body);
+            document.addEventListener('click', () => controls.lock());
+
+            function onKeyDown(event) {
+                switch (event.code) {
+                    case 'ArrowUp':
+                    case 'KeyW':
+                        controls.moveForward(0.1);
+                        break;
+                    case 'ArrowLeft':
+                    case 'KeyA':
+                        controls.moveRight(-0.1);
+                        break;
+                    case 'ArrowDown':
+                    case 'KeyS':
+                        controls.moveForward(-0.1);
+                        break;
+                    case 'ArrowRight':
+                    case 'KeyD':
+                        controls.moveRight(0.1);
+                        break;
+                }
+            }
+
+            document.addEventListener('keydown', onKeyDown);
+
+            // Animación
+            function animate() {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        init();
+    </script>
+</body>
+</html>
