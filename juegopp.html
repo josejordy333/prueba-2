@@ -1,77 +1,205 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protege el Delta del Paraná</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-        }
-        .game-container {
-            max-width: 600px;
-            margin: 20px;
-            padding: 20px;
-            border: 2px solid #333;
-            border-radius: 10px;
-            background-color: #fff;
-        }
-        .game-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .game-text {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-        .game-options button {
-            font-size: 16px;
-            padding: 10px 20px;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: #fff;
-        }
-        .game-options button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <h1>Protege el Delta del Paraná</h1>
-    <div class="game-container">
-        <img src="https://i.imgur.com/your-image.jpg" alt="Delta del Paraná" class="game-image">
-        <div id="gameText" class="game-text">Bienvenido al Delta del Paraná. ¿Qué acción deseas tomar para proteger esta área del cambio climático?</div>
-        <div class="game-options">
-            <button onclick="chooseOption('reforestation')">Iniciar un proyecto de reforestación</button>
-            <button onclick="chooseOption('cleanEnergy')">Promover energías limpias</button>
-        </div>
-    </div>
-    <script>
-        function chooseOption(option) {
-            const gameText = document.getElementById('gameText');
-            if (option === 'reforestation') {
-                gameText.innerHTML = 'Iniciaste un proyecto de reforestación. Esto ayudará a absorber CO2 y mejorar el hábitat para la fauna local. ¡Buena elección!';
-            } else if (option === 'cleanEnergy') {
-                gameText.innerHTML = 'Promoviste el uso de energías limpias. Esto reducirá la emisión de gases de efecto invernadero y mejorará la calidad del aire. ¡Excelente decisión!';
-            }
-        }
-    </script>
-</body>
-</html>
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "vscode": {
+     "languageId": "html"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "<!DOCTYPE html>\n",
+    "<html lang=\"es\">\n",
+    "<head>\n",
+    "    <meta charset=\"UTF-8\">\n",
+    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n",
+    "    <title>Protege el Delta del Paraná</title>\n",
+    "    <link rel=\"stylesheet\" href=\"styles.css\">\n",
+    "</head>\n",
+    "<body>\n",
+    "    <div class=\"game-container\">\n",
+    "        <h1>Protege el Delta del Paraná</h1>\n",
+    "        <div id=\"game\">\n",
+    "            <div id=\"scene\">\n",
+    "                <img id=\"background\" src=\"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fcambio-clim%25C3%25A1tico&psig=AOvVaw11tj2-VOszzQCI_UYMLA0w&ust=1722784786677000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCKiRm9CP2YcDFQAAAAAdAAAAABAE\" alt=\"Delta del Paraná\">\n",
+    "                <div id=\"character\"></div>\n",
+    "                <div id=\"npc\"></div>\n",
+    "            </div>\n",
+    "            <div id=\"dialogue\">\n",
+    "                <p id=\"dialogueText\">Bienvenido al Delta del Paraná. ¿Qué deseas hacer para proteger este ecosistema?</p>\n",
+    "                <div id=\"choices\">\n",
+    "                    <button onclick=\"makeChoice('reforestacion')\">Iniciar reforestación</button>\n",
+    "                    <button onclick=\"makeChoice('energiaLimpia')\">Promover energías limpias</button>\n",
+    "                </div>\n",
+    "            </div>\n",
+    "        </div>\n",
+    "    </div>\n",
+    "    <script src=\"script.js\"></script>\n",
+    "</body>\n",
+    "</html>"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "vscode": {
+     "languageId": "css"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "body {\n",
+    "    font-family: Arial, sans-serif;\n",
+    "    margin: 0;\n",
+    "    padding: 0;\n",
+    "    display: flex;\n",
+    "    justify-content: center;\n",
+    "    align-items: center;\n",
+    "    height: 100vh;\n",
+    "    background-color: #e0f7fa;\n",
+    "}\n",
+    "\n",
+    ".game-container {\n",
+    "    width: 800px;\n",
+    "    background: #ffffff;\n",
+    "    padding: 20px;\n",
+    "    border-radius: 10px;\n",
+    "    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\n",
+    "    text-align: center;\n",
+    "}\n",
+    "\n",
+    "#scene {\n",
+    "    position: relative;\n",
+    "    width: 100%;\n",
+    "    height: 400px;\n",
+    "    border: 2px solid #00796b;\n",
+    "    border-radius: 10px;\n",
+    "    overflow: hidden;\n",
+    "}\n",
+    "\n",
+    "#background {\n",
+    "    width: 100%;\n",
+    "    height: 100%;\n",
+    "    object-fit: cover;\n",
+    "}\n",
+    "\n",
+    "#character, #npc {\n",
+    "    position: absolute;\n",
+    "    bottom: 0;\n",
+    "    width: 50px;\n",
+    "    height: 100px;\n",
+    "}\n",
+    "\n",
+    "#character {\n",
+    "    left: 10%;\n",
+    "    background: url('https://example.com/character.png') no-repeat center;\n",
+    "    background-size: cover;\n",
+    "}\n",
+    "\n",
+    "#npc {\n",
+    "    right: 10%;\n",
+    "    background: url('https://example.com/npc.png') no-repeat center;\n",
+    "    background-size: cover;\n",
+    "}\n",
+    "\n",
+    "#dialogue {\n",
+    "    margin-top: 20px;\n",
+    "}\n",
+    "\n",
+    "#choices button {\n",
+    "    margin: 5px;\n",
+    "    padding: 10px 20px;\n",
+    "    border: none;\n",
+    "    background-color: #00796b;\n",
+    "    color: white;\n",
+    "    cursor: pointer;\n",
+    "    border-radius: 5px;\n",
+    "}\n",
+    "\n",
+    "#choices button:hover {\n",
+    "    background-color: #004d40;\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "vscode": {
+     "languageId": "javascript"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "const gameData = {\n",
+    "    start: {\n",
+    "        dialogue: \"Bienvenido al Delta del Paraná. ¿Qué deseas hacer para proteger este ecosistema?\",\n",
+    "        choices: [\n",
+    "            { text: \"Iniciar reforestación\", action: \"reforestacion\" },\n",
+    "            { text: \"Promover energías limpias\", action: \"energiaLimpia\" }\n",
+    "        ]\n",
+    "    },\n",
+    "    reforestacion: {\n",
+    "        dialogue: \"Has iniciado un proyecto de reforestación. Esto ayudará a absorber CO2 y mejorar el hábitat para la fauna local. ¿Qué deseas hacer a continuación?\",\n",
+    "        choices: [\n",
+    "            { text: \"Fomentar agricultura sostenible\", action: \"agriculturaSostenible\" },\n",
+    "            { text: \"Desarrollar programas educativos\", action: \"programasEducativos\" }\n",
+    "        ]\n",
+    "    },\n",
+    "    energiaLimpia: {\n",
+    "        dialogue: \"Has promovido el uso de energías limpias. Esto reducirá las emisiones de gases de efecto invernadero y mejorará la calidad del aire. ¿Qué deseas hacer a continuación?\",\n",
+    "        choices: [\n",
+    "            { text: \"Instalar paneles solares\", action: \"panelesSolares\" },\n",
+    "            { text: \"Implementar turbinas eólicas\", action: \"turbinasEolicas\" }\n",
+    "        ]\n",
+    "    },\n",
+    "    agriculturaSostenible: {\n",
+    "        dialogue: \"Has fomentado la agricultura sostenible, reduciendo el uso de pesticidas y conservando el suelo. El Delta del Paraná prospera. ¡Has tenido éxito!\",\n",
+    "        choices: []\n",
+    "    },\n",
+    "    programasEducativos: {\n",
+    "        dialogue: \"Has desarrollado programas educativos para las comunidades locales, aumentando la conciencia y el apoyo a las iniciativas ambientales. ¡Has tenido éxito!\",\n",
+    "        choices: []\n",
+    "    },\n",
+    "    panelesSolares: {\n",
+    "        dialogue: \"Has instalado paneles solares en las comunidades locales, proporcionando energía limpia y reduciendo las emisiones de CO2. ¡Has tenido éxito!\",\n",
+    "        choices: []\n",
+    "    },\n",
+    "    turbinasEolicas: {\n",
+    "        dialogue: \"Has implementado turbinas eólicas, generando energía renovable y protegiendo el ambiente. ¡Has tenido éxito!\",\n",
+    "        choices: []\n",
+    "    }\n",
+    "};\n",
+    "\n",
+    "function makeChoice(action) {\n",
+    "    const scene = gameData[action];\n",
+    "    const dialogueText = document.getElementById(\"dialogueText\");\n",
+    "    const choicesDiv = document.getElementById(\"choices\");\n",
+    "\n",
+    "    dialogueText.textContent = scene.dialogue;\n",
+    "    choicesDiv.innerHTML = \"\";\n",
+    "\n",
+    "    scene.choices.forEach(choice => {\n",
+    "        const button = document.createElement(\"button\");\n",
+    "        button.textContent = choice.text;\n",
+    "        button.onclick = () => makeChoice(choice.action);\n",
+    "        choicesDiv.appendChild(button);\n",
+    "    });\n",
+    "}\n",
+    "\n",
+    "// Inicializar el juego\n",
+    "makeChoice(\"start\");"
+   ]
+  }
+ ],
+ "metadata": {
+  "language_info": {
+   "name": "python"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
