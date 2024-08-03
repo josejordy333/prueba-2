@@ -3,108 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Delta del Paraná</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Protege el Delta del Paraná</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .game-container {
+            max-width: 600px;
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        .game-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .game-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .game-options button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: #fff;
+        }
+        .game-options button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-</html>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="main.js"></script>
+    <h1>Protege el Delta del Paraná</h1>
+    <div class="game-container">
+        <img src="https://i.imgur.com/your-image.jpg" alt="Delta del Paraná" class="game-image">
+        <div id="gameText" class="game-text">Bienvenido al Delta del Paraná. ¿Qué acción deseas tomar para proteger esta área del cambio climático?</div>
+        <div class="game-options">
+            <button onclick="chooseOption('reforestation')">Iniciar un proyecto de reforestación</button>
+            <button onclick="chooseOption('cleanEnergy')">Promover energías limpias</button>
+        </div>
+    </div>
+    <script>
+        function chooseOption(option) {
+            const gameText = document.getElementById('gameText');
+            if (option === 'reforestation') {
+                gameText.innerHTML = 'Iniciaste un proyecto de reforestación. Esto ayudará a absorber CO2 y mejorar el hábitat para la fauna local. ¡Buena elección!';
+            } else if (option === 'cleanEnergy') {
+                gameText.innerHTML = 'Promoviste el uso de energías limpias. Esto reducirá la emisión de gases de efecto invernadero y mejorará la calidad del aire. ¡Excelente decisión!';
+            }
+        }
+    </script>
 </body>
-body {
-    margin: 0;
-    overflow: hidden;
-    font-family: sans-serif;
-}
-function generateTerrain(size, height) {
-    const terrain = [];
-    for (let x = 0; x < size; x++) {
-        terrain[x] = [];
-        for (let y = 0; y < height; y++) {
-            terrain[x][y] = [];
-            for (let z = 0; z < size; z++) {
-                if (y < height / 2) {
-                    terrain[x][y][z] = 1; // Tierra
-                } else {
-                    terrain[x][y][z] = 0; // Aire
-                }
-            }
-        }
-    }
-    return terrain;
-}
-import { generateTerrain } from './terrain.js';
-
-let scene, camera, renderer;
-const terrainSize = 50;
-const terrainHeight = 20;
-const terrainData = generateTerrain(terrainSize, terrainHeight);
-
-function init() {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    // Luz
-    const ambientLight = new THREE.AmbientLight(0xffffff);
-    scene.add(ambientLight);
-
-    // Crear terreno
-    const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const blockMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-
-    for (let x = 0; x < terrainSize; x++) {
-        for (let y = 0; y < terrainHeight; y++) {
-            for (let z = 0; z < terrainSize; z++) {
-                if (terrainData[x][y][z] === 1) {
-                    const block = new THREE.Mesh(blockGeometry, blockMaterial);
-                    block.position.set(x - terrainSize / 2, y, z - terrainSize / 2);
-                    scene.add(block);
-                }
-            }
-        }
-    }
-
-    // Cámara
-    camera.position.set(0, 10, 30);
-    camera.lookAt(0, 0, 0);
-
-    // Controles
-    const controls = new THREE.PointerLockControls(camera, document.body);
-    document.addEventListener('click', () => controls.lock());
-
-    function onKeyDown(event) {
-        switch (event.code) {
-            case 'ArrowUp':
-            case 'KeyW':
-                controls.moveForward(0.1);
-                break;
-            case 'ArrowLeft':
-            case 'KeyA':
-                controls.moveRight(-0.1);
-                break;
-            case 'ArrowDown':
-            case 'KeyS':
-                controls.moveForward(-0.1);
-                break;
-            case 'ArrowRight':
-            case 'KeyD':
-                controls.moveRight(0.1);
-                break;
-        }
-    }
-
-    document.addEventListener('keydown', onKeyDown);
-
-    // Animación
-    function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
-    animate();
-}
-
-init();
-
+</html>
