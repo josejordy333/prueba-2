@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo del Delta del Paraná</title>
+    <style>
+        #mapa {
+            width: 100%;
+            height: 500px;
+        }
+        .info-box {
+            display: none;
+            position: absolute;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid black;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1>Mapa Interactivo del Delta del Paraná</h1>
+    <div id="mapa"></div>
+    <div id="info-box" class="info-box">
+        <h2>Impacto del Cambio Climático en el Delta del Paraná</h2>
+        <p>El Delta del Paraná está experimentando cambios significativos debido al cambio climático. Los principales impactos incluyen la pérdida de biodiversidad, la alteración de los ciclos hidrológicos, y el aumento de la frecuencia e intensidad de las inundaciones. Estas condiciones afectan tanto a la fauna como a las comunidades humanas que dependen del delta.</p>
+    </div>
+    
+    <script>
+        // Inicialización del mapa
+        var mapa = L.map('mapa').setView([-32.268611, -60.716944], 10);
+
+        // Añadir capa de mapa base
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mapa);
+
+        // Definir los puntos que contornean el Delta del Paraná
+        var polygon = L.polygon([
+            [-32.268611, -60.716944],
+            [-32.3, -60.7],
+            [-32.2, -60.6],
+            [-32.1, -60.8],
+            [-32.268611, -60.716944]
+        ]).addTo(mapa);
+
+        // Evento para mostrar el cartel con información
+        polygon.on('click', function(e) {
+            var infoBox = document.getElementById('info-box');
+            infoBox.style.display = 'block';
+            infoBox.style.left = e.originalEvent.pageX + 'px';
+            infoBox.style.top = e.originalEvent.pageY + 'px';
+        });
+
+        // Evento para ocultar el cartel cuando se hace clic fuera del área
+        mapa.on('click', function(e) {
+            var infoBox = document.getElementById('info-box');
+            infoBox.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
